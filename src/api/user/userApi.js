@@ -13,18 +13,6 @@ export const getAllUsers = async (setUsers, setIsLoading) => {
   }
 };
 
-export const createUser = async (userData, setUsers, setIsLoading) => {
-  setIsLoading(true);
-  try {
-    await api.post(`/api/register`, userData);
-    getAllUsers(setUsers, setIsLoading);
-  } catch (error) {
-    console.error("error:", error);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
 export const editUser = async (userId, form, setUsers, setIsLoading) => {
   setIsLoading(true);
   try {
