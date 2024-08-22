@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-// import ReCAPTCHA from "react-google-recaptcha";
+import React, { useContext, useState, useRef } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import Button from "../Button/Button";
 import { AuthContext } from "../../context/authContextProvider";
 import { login } from "../../api/auth/auth";
@@ -14,7 +14,7 @@ function LoginForm() {
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  // const recaptchaRef = React.useRef();
+  const recaptchaRef = useRef();
 
   const initialForm = {
     username: "",
@@ -25,8 +25,8 @@ function LoginForm() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // const token = await recaptchaRef.current.executeAsync();
-    // console.log("TOKEN: ", token);
+    const token = await recaptchaRef.current.executeAsync();
+    console.log("TOKEN: ", token);
     login(form, dispatch, navigate, setErrorMessage);
 
     setForm(initialForm);
@@ -77,7 +77,7 @@ function LoginForm() {
         />
       </div>
       <div className="w-full flex items-center">
-        {/* <ReCAPTCHA ref={recaptchaRef} sitekey="Your client site key" /> */}
+        <ReCAPTCHA ref={recaptchaRef} sitekey="Your client site key" />
       </div>
 
       {errorMessage && (
