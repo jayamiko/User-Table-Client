@@ -5,6 +5,7 @@ import Button from "../components/Button/Button";
 import UserListTable from "../components/Table/UserListTable";
 import { AuthContext } from "../context/authContextProvider";
 import { useNavigate } from "react-router-dom";
+import { COLOR, STATE } from "../constants/constants";
 
 function Home() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ function Home() {
   const logoutHandle = (e) => {
     e.preventDefault();
     dispatch({
-      type: "LOGOUT",
+      type: STATE.Logout,
       isLogin: false,
       user: {
         username: "",
@@ -34,7 +35,7 @@ function Home() {
   return (
     <div className="container mx-auto h-screen sm:p-5 lg:p-10">
       <div className="w-full flex justify-end mb-2">
-        <Button text="Logout" color="red" onClick={logoutHandle} />
+        <Button text="Logout" color={COLOR.Rose} onClick={logoutHandle} />
       </div>
       {/* USER TABLE DATA */}
       {isLoading ? (

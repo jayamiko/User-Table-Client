@@ -3,6 +3,7 @@ import LoginForm from "../components/Form/LoginForm";
 import { AuthContext } from "../context/authContextProvider";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import { STATE } from "../constants/constants";
 
 function Login() {
   const navigate = useNavigate;
@@ -15,7 +16,7 @@ function Login() {
 
       if (response.status !== 200) {
         dispatch({
-          type: "AUTH_ERROR",
+          type: STATE.AuthError,
         });
       }
 
@@ -24,7 +25,7 @@ function Login() {
 
       if (response.status === 200) {
         dispatch({
-          type: "AUTH_SUCCESS",
+          type: STATE.AuthSuccess,
           payload,
         });
         navigate("/");
@@ -32,7 +33,7 @@ function Login() {
     } catch (error) {
       console.log(error);
       dispatch({
-        type: "AUTH_ERROR",
+        type: STATE.AuthError,
       });
     }
   };

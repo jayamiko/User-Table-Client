@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { fields } from "../../constants/constants";
+import { COLOR, fields } from "../../constants/constants";
 import Button from "../Button/Button";
 import CModal from "../Modal/CModal";
 import { useState } from "react";
@@ -53,7 +53,7 @@ function UserListTable({ data, setData, setIsLoading }) {
               <td>{user.password}</td>
               <td>{moment(user.create_time).format("LLL")}</td>
               <td className="flex space-x-2 p-3 h-full ">
-                <Button text="Edit" color="orange" onClick={openModal} />
+                <Button text="Edit" color={COLOR.Amber} onClick={openModal} />
                 <CModal
                   title="Edit User"
                   show={showModal}
@@ -63,12 +63,12 @@ function UserListTable({ data, setData, setIsLoading }) {
                   <div className="w-full flex justify-center space-x-2">
                     <Button
                       text="Update"
-                      color="green"
+                      color={COLOR.Green}
                       onClick={() => handleEdit(user.id)}
                     />
                     <Button
                       text="Cancel"
-                      color="grey"
+                      color={COLOR.Slate}
                       onClick={() => setShowModal(false)}
                     />
                   </div>
@@ -77,7 +77,7 @@ function UserListTable({ data, setData, setIsLoading }) {
                 {/* Delete User */}
                 <Button
                   text="Delete"
-                  color="maroon"
+                  color={COLOR.Maroon}
                   onClick={() => setConfirmModal(true)}
                 />
                 <CModal
@@ -88,12 +88,12 @@ function UserListTable({ data, setData, setIsLoading }) {
                   <div className="w-full flex justify-center space-x-2">
                     <Button
                       text="Delete User"
-                      color="maroon"
+                      color={COLOR.Maroon}
                       onClick={() => handleDelete(user.id)}
                     />
                     <Button
                       text="Cancel"
-                      color="grey"
+                      color={COLOR.Slate}
                       onClick={() => setConfirmModal(false)}
                     />
                   </div>

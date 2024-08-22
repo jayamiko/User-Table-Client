@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/authContextProvider";
 import { login } from "../../api/auth/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "react-bootstrap";
+import { COLOR } from "../../constants/constants";
 
 function LoginForm() {
   const { dispatch } = useContext(AuthContext);
@@ -98,7 +99,7 @@ function LoginForm() {
         </p>
         <Button
           text="Submit"
-          color="blue"
+          color={COLOR.SkyBlue}
           onClick={handleLogin}
           disabled={!shouldEnableButton(username, password)}
         >

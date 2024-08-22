@@ -1,4 +1,5 @@
 import { createContext, useReducer } from "react";
+import { STATE } from "../constants/constants";
 
 const initialValue = {
   isLoading: true,
@@ -15,23 +16,23 @@ export const AuthContext = createContext();
 function reducer(state, action) {
   const { type, payload } = action;
   switch (type) {
-    case "AUTH_SUCCESS":
-    case "LOGIN":
+    case STATE.AuthSuccess:
+    case STATE.Login:
       localStorage.setItem("token", payload.token);
       return {
         isLoading: false,
         isLogin: true,
         user: payload,
       };
-    case "REGISTER":
+    case STATE.Register:
       localStorage.setItem("token", payload.token);
       return {
         isLoading: false,
         isLogin: true,
         user: payload,
       };
-    case "AUTH_ERROR":
-    case "LOGOUT":
+    case STATE.AuthError:
+    case STATE.Logout:
       localStorage.removeItem("token");
       return initialValue;
     default:

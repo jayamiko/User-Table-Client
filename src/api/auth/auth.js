@@ -1,4 +1,5 @@
 import api, { setAuthToken } from "..";
+import { STATE } from "../../constants/constants";
 
 export const login = async (form, dispatch, navigate, setErrorMessage) => {
   try {
@@ -12,11 +13,10 @@ export const login = async (form, dispatch, navigate, setErrorMessage) => {
     const response = await api.post("/api/login", body, config);
     const data = response.data;
     setAuthToken(data?.token);
-    console.log(response);
 
     if (response?.status === 200) {
       dispatch({
-        type: "LOGIN",
+        type: STATE.Login,
         payload: data,
       });
 
@@ -37,13 +37,12 @@ export const createUser = async (
 ) => {
   try {
     const response = await api.post(`/api/register`, userData);
-    console.log(response);
     const data = response.data;
     setAuthToken(data?.token);
 
     if (response?.status === 200) {
       dispatch({
-        type: "REGISTER",
+        type: STATE.Register,
         payload: data,
       });
 

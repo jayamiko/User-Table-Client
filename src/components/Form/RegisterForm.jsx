@@ -4,6 +4,7 @@ import { createUser } from "../../api/auth/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContextProvider";
 import { Alert } from "react-bootstrap";
+import { COLOR } from "../../constants/constants";
 
 function RegisterForm() {
   const navigate = useNavigate();
@@ -87,7 +88,7 @@ function RegisterForm() {
         </p>
         <Button
           text="Submit"
-          color="blue"
+          color={COLOR.SkyBlue}
           onClick={register}
           disabled={!shouldEnableButton(username, password)}
         >
