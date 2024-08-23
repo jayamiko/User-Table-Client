@@ -1,11 +1,11 @@
-import React, { useContext, useState, useRef } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import React, { useContext, useState } from "react";
 import Button from "../Button/Button";
 import { AuthContext } from "../../context/authContextProvider";
 import { login } from "../../api/auth/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "react-bootstrap";
 import { COLOR } from "../../constants/constants";
+import CaptchaText from "../Captcha/CaptchaTest";
 
 function LoginForm() {
   const { dispatch } = useContext(AuthContext);
@@ -13,8 +13,7 @@ function LoginForm() {
   const navigate = useNavigate();
 
   const [errorMessage, setErrorMessage] = useState("");
-
-  const recaptchaRef = useRef();
+  const [captchaStatus, setCaptchaStatus] = useState(null);
 
   const initialForm = {
     username: "",
@@ -23,10 +22,12 @@ function LoginForm() {
 
   const [form, setForm] = useState(initialForm);
 
+  const handleCaptchaStatus = (status) => {
+    setCaptchaStatus(status);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    const token = await recaptchaRef.current.executeAsync();
-    console.log("TOKEN: ", token);
     login(form, dispatch, navigate, setErrorMessage);
 
     setForm(initialForm);
@@ -34,8 +35,8 @@ function LoginForm() {
 
   const { username, password } = form;
 
-  function shouldEnableButton(username, password) {
-    return username && password;
+  function shouldEnableButton() {
+    return username && password && captchaStatus;
   }
 
   return (
@@ -77,7 +78,14 @@ function LoginForm() {
         />
       </div>
       <div className="w-full flex items-center">
-        <ReCAPTCHA ref={recaptchaRef} sitekey="Your client site key" />
+        <CaptchaText onCaptchaStatus={handleCaptchaStatus} />
+      </div>
+
+      <div className="w-full">
+        {captchaStatus && <Alert variant="success">Captcha is correct!</Alert>}
+        {captchaStatus === false && (
+          <Alert variant="danger">Captcha is incorrect!</Alert>
+        )}
       </div>
 
       {errorMessage && (
@@ -101,7 +109,7 @@ function LoginForm() {
           text="Submit"
           color={COLOR.SkyBlue}
           onClick={handleLogin}
-          disabled={!shouldEnableButton(username, password)}
+          disabled={!shouldEnableButton()}
         >
           SUBMIT
         </Button>
