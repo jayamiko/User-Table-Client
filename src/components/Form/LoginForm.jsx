@@ -5,7 +5,7 @@ import { login } from "../../api/auth/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "react-bootstrap";
 import { COLOR } from "../../constants/constants";
-import CaptchaText from "../Captcha/CaptchaTest";
+import CaptchaText from "../Captcha/CaptchaText";
 
 function LoginForm() {
   const { dispatch } = useContext(AuthContext);

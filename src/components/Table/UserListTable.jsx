@@ -60,7 +60,7 @@ function UserListTable({ data, setData, setIsLoading }) {
                   setShow={setShowModal}
                 >
                   <UserForm form={form} setForm={setForm} />
-                  <div className="w-full flex justify-center space-x-2">
+                  <div className="w-full flex justify-end space-x-2 mt-3">
                     <Button
                       text="Update"
                       color={COLOR.Green}
