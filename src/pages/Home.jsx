@@ -1,52 +1,98 @@
-import { useContext, useState } from "react";
-import { useEffect } from "react";
-import { getAllUsers } from "../api/user/userApi";
-import Button from "../components/Button/Button";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import UserListTable from "../components/Table/UserListTable";
-import { AuthContext } from "../context/authContextProvider";
-import { useNavigate } from "react-router-dom";
-import { COLOR, STATE } from "../constants/constants";
 
 function Home() {
-  const navigate = useNavigate();
-  const { dispatch } = useContext(AuthContext);
+  const [data, setData] = useState([]);
+  const [query, setQuery] = useState("");
+  const [count, setCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [users, setUsers] = useState([]);
+  const itemPerPage = 10;
+  const [limit, setLimit] = useState(itemPerPage);
+  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
-    getAllUsers(setUsers, setIsLoading);
-  }, []);
+    axios.get("https://jsonplaceholder.typicode.com/posts").then((response) => {
+      const result = response.data;
+      setCount(result.length);
+      const dataSlice = result?.slice(offset, limit);
 
-  const logoutHandle = (e) => {
-    e.preventDefault();
-    dispatch({
-      type: STATE.Logout,
-      isLogin: false,
-      user: {
-        username: "",
-        password: "",
-      },
+      setData(dataSlice);
+      setIsLoading(false);
     });
-    navigate("/login");
+  }, [limit, offset]);
+
+  function onSearch(query) {
+    if (query) {
+      axios
+        .get("https://jsonplaceholder.typicode.com/posts")
+        .then((response) => {
+          setLimit(itemPerPage);
+          setOffset(0);
+
+          const result = response.data;
+          const dataSlice = result?.slice(offset, limit);
+          const filterData = dataSlice.filter((user) =>
+            user.title.includes(query)
+          );
+          setData(filterData);
+        });
+    }
+  }
+
+  useEffect(() => {
+    onSearch(query);
+  }, [query, limit, offset]);
+
+  const handlePrevPage = () => {
+    setLimit(limit - itemPerPage);
+    setOffset(offset - itemPerPage);
+  };
+
+  const handleNextPage = () => {
+    setLimit(limit + itemPerPage);
+    setOffset(offset + itemPerPage);
   };
 
   return (
     <div className="container mx-auto h-screen sm:p-5 lg:p-10">
-      <div className="w-full flex justify-end mb-2">
-        <Button text="Logout" color={COLOR.Rose} onClick={logoutHandle} />
-      </div>
+      <input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search.."
+        className="border px-2 w-60 py-2 border-black rounded-md"
+      />
+
       {/* USER TABLE DATA */}
       {isLoading ? (
-        <div>Loading...</div>
+        <div className="w-full flex justify-center h-[50vh] items-center">
+          Loading...
+        </div>
       ) : (
-        <UserListTable
-          data={users}
-          setData={setUsers}
-          setIsLoading={setIsLoading}
-        />
+        <UserListTable data={data} />
       )}
+
+      <div id="pagination" className="w-full flex justify-between items-center">
+        <button
+          className={`${
+            offset ? "bg-[#333] text-white" : "bg-slate-300 opacity-50"
+          } font-bold text-xl px-4 py-2 border rounded-md`}
+          onClick={handlePrevPage}
+          disabled={offset === 0 && limit === itemPerPage ? true : false}
+        >
+          Prev
+        </button>
+        <button
+          className={`${
+            limit < count ? "bg-[#333] text-white" : "bg-slate-300 opacity-50"
+          } font-bold text-xl px-4 py-2 border rounded-md`}
+          onClick={handleNextPage}
+          disabled={limit < count ? false : true}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
