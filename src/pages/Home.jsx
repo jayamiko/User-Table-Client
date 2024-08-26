@@ -23,25 +23,24 @@ function Home() {
     });
   }, [limit, offset]);
 
-  function onSearch(query) {
-    if (query) {
-      axios
-        .get("https://jsonplaceholder.typicode.com/posts")
-        .then((response) => {
-          setLimit(itemPerPage);
-          setOffset(0);
-
-          const result = response.data;
-          const dataSlice = result?.slice(offset, limit);
-          const filterData = dataSlice.filter((user) =>
-            user.title.includes(query)
-          );
-          setData(filterData);
-        });
-    }
-  }
-
   useEffect(() => {
+    function onSearch(query) {
+      if (query) {
+        axios
+          .get("https://jsonplaceholder.typicode.com/posts")
+          .then((response) => {
+            setLimit(itemPerPage);
+            setOffset(0);
+
+            const result = response.data;
+            const dataSlice = result?.slice(offset, limit);
+            const filterData = dataSlice.filter((user) =>
+              user.title.includes(query)
+            );
+            setData(filterData);
+          });
+      }
+    }
     onSearch(query);
   }, [query, limit, offset]);
 
